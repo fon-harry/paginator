@@ -1,19 +1,32 @@
 let express = require('express')
 let app = express()
 let mysql = require('mysql')
-let connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'nodejs',
-  password: 'nodejs',
-  database: 'world'
+
+app.set('views', './views')
+app.set('view engine', 'pug')
+
+app.get('/index', function (req, res) {
+  res.render('index', {
+    title: 'Hey',
+    message: 'Hello there!'
+  })
 })
 
-app.get('/', function (req, res) {  
-  connection.connect()
+app.get('/', function (req, res) {
+  let connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'nodejs',
+    password: 'nodejs',
+    database: 'world'
+  })
 
-  connection.query('SELECT * from world.city Limit 10', (error, results, fields) => {
+  connection.connect((error) => {
     if (error) throw error
-    res.send(results)
+  })
+
+  connection.query('SELECT * from world.city', (error, results, fields) => {
+    if (error) throw error
+    res.send(JSON.stringify(results))
   })
 
   connection.end()
