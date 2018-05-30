@@ -2,4 +2,19 @@ html
   head
     title!= title
   body
-    h1!= message
+    table
+      thead
+        tr
+          th ID
+          th Name
+          th CountryCode
+          th District
+          th Population
+      tbody
+        each val in data
+          tr
+            td= val.ID
+            td= val.Name
+            td= val.CountryCode
+            td= val.District
+            td= val.Population

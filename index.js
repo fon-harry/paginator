@@ -19,7 +19,7 @@ function getAllData (callback) {
 
   connection.query('SELECT * from world.city', (error, results, fields) => {
     if (error) throw error
-    callback(JSON.stringify(results))
+    callback(results)
   })
 
   connection.end()
@@ -27,14 +27,32 @@ function getAllData (callback) {
 
 app.get('/', function (req, res) {
   getAllData((data) => {
-    res.send(data)
+    res.send(JSON.stringify(data))
+  })
+})
+
+function getTitle (callback) {
+  callback('Title')
+}
+
+//  callback hell ?
+app.get('/indexhell', function (req, res) {
+  getTitle((title) => {
+    getAllData((data) => {
+      res.render('index', {
+        title: title,
+        message: data
+      })
+    })
   })
 })
 
 app.get('/index', function (req, res) {
-  res.render('index', {
-    title: 'Hey',
-    message: 'Hello there!'
+  getAllData((data) => {
+    res.render('index', {
+      title: 'Table',
+      data: data
+    })
   })
 })
 
